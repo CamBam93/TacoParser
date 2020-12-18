@@ -12,33 +12,54 @@
             logger.LogInfo("Begin parsing");
 
             // Take your line and use line.Split(',') to split it up into an array of strings, separated by the char ','
-            var cells = line.Split(',');
+            string[] cells = line.Split(',');
 
             // If your array.Length is less than 3, something went wrong
             if (cells.Length < 3)
             {
                 // Log that and return null
+                logger.LogError("Error, did not split");
+                
                 // Do not fail if one record parsing fails, return null
                 return null; // TODO Implement
             }
-
-            // grab the latitude from your array at index 0
-            // grab the longitude from your array at index 1
-            // grab the name from your array at index 2
-
-            // Your going to need to parse your string as a `double`
+            // D- Your going to need to parse your string as a `double`
             // which is similar to parsing a string as an `int`
+            // grab the latitude from your array at index 0
+            double lat = 0;
+            if (double.TryParse(cells[0], out lat) == false)
+            {
+                logger.LogError($"{cells[0]} Bad data, unable to parse latitude.");
+            }
 
-            // You'll need to create a TacoBell class
+            // grab the longitude from your array at index 1
+            double lon = 0;
+            if(double.TryParse(cells[1], out lon) == false)
+            {
+                logger.LogError($"{cells[1]} Bad data, unable to parse longitude.");
+            }
+
+            // grab the name from your array at index 2
+            var loc = cells[2];
+            if (loc == null || loc.Length == 0)
+            {
+                logger.LogError("File doesnt cotain Name");
+            }
+
+            // D- You'll need to create a TacoBell class
             // that conforms to ITrackable
 
             // Then, you'll need an instance of the TacoBell class
             // With the name and point set correctly
+            var coord = new Point(lon, lat);
+            var taco1 = new TacoBell();
+            taco1.Location = coord;
+            taco1.Name = loc;
 
             // Then, return the instance of your TacoBell class
             // Since it conforms to ITrackable
 
-            return null;
+            return taco1;
         }
     }
 }
